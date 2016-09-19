@@ -1,0 +1,19 @@
+[user]
+	name = Chris
+[color]
+	status = auto
+	branch = auto
+[core]
+	excludesfile = ~/.gitignore_global
+[difftool "opendiff"]
+	path = 
+    tool = opendiff
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	trustExitCode = true
+[mergetool]
+	keepBackup = false
+[merge]
+	tool = opendiff
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+[push]
+	default = simple
