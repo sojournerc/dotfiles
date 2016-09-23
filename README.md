@@ -1,6 +1,4 @@
 # dotfiles
-
--
 - Install zshell, oh-my-zh
 - Install nvm
 
@@ -23,3 +21,7 @@ decrypt with -> `openssl des3 -d -in sublime-license.encr -out sublime-license.t
   -
 
 - Install postgreSQL
+- Install f.lux (redshift)
+`reshift -h`
+
+Increase key repeat
