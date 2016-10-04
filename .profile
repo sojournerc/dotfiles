@@ -6,7 +6,6 @@ alias backup="rsync -avhP --stats /Volumes/junk/Safe /Volumes/1/"
 
 export PGRES_BIN="/Applications/Postgres.app/Contents/Versions/9.4/bin"
 export PATH="$PATH:$JAVA_HOME:$PGRES_BIN:/bin:/opt/local/bini"
-export PATH="$PATH:/Users/chrismeyer/.nvm/versions"
 
 alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
