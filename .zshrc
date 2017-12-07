@@ -1,4 +1,4 @@
-source ~/.profile
+source ~/.zprofile
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -73,3 +73,7 @@ source $ZSH/oh-my-zsh.sh
 
 export NVM_DIR="/Users/chris/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+eval "$(direnv hook zsh)"
+
+export PATH="$HOME/.yarn/bin:$PATH"

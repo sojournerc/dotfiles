@@ -1,7 +1,6 @@
 *.sublime*
 
 .DS_STORE
-
-
-# probs not a good place for this, but don't want to commit site.json outside of local
-*site.json
+.DS_Store
+.envrc
+.dockerenv
