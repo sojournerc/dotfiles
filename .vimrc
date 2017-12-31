@@ -18,7 +18,7 @@ Plugin 'maximbaz/lightline-ale'
 "
 "  " ----- Vim as a programmer's text editor -----------------------------
 Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-scripts/a.vim'
 Plugin 'w0rp/ale'
 Plugin 'Valloric/YouCompleteMe'
@@ -127,6 +127,8 @@ autocmd QuickFixCmdPost    l* nested lwindow
 
 " search ctrlp with regex by default
 let g:ctrlp_regexp_search = 1
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
 " let g:ctrlp_clear_cache_on_exit = 0
 
 " Keep undo history across sessions by storing it in a file

@@ -1,9 +1,4 @@
-alias zfe="cd ~/src/zvelo.io/frontend"
-alias sojournerc="cd ~/src/sojournerc/"
-alias economap="cd ~/src/economap"
-alias vim="/usr/local/bin/vim"
 
-alias subl="/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl"
 
 export NODE_PATH="/usr/local/lib/node_modules:/usr/local/lib/node"
 export NODE_ENV="development"
