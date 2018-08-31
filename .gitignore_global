@@ -1,6 +1,7 @@
 *.sublime*
-
+*.swp*
 .DS_STORE
 .DS_Store
 .envrc
 .dockerenv
+*.note

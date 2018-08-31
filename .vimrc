@@ -22,14 +22,28 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-scripts/a.vim'
 Plugin 'w0rp/ale'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'JamshedVesuna/vim-markdown-preview'
+Plugin 'mustache/vim-mustache-handlebars'
 
-
+"
 "  " ----- Working with Git ----------------------------------------------
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 "
 "  " ------ Go ------"
-Plugin 'fatih/vim-go'
+Plugin 'fatih/vim-go', { 'do': 'GoUpdateBinaries' } 
+
+"  " ------ google/vim-codefmt ---- "
+" Add maktaba and codefmt to the runtimepath.
+" (The latter must be installed before it can be used.)
+Plugin 'google/vim-maktaba'
+Plugin 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plugin 'google/vim-glaive'
+" ...
+
 "
 " " ------- Typescript _______ "
 Plugin 'leafgarland/typescript-vim'
@@ -39,6 +53,20 @@ Plugin 'Quramy/tsuquyomi'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+" the glaive#Install() should go after the "call vundle#end()"
+call glaive#Install()
+augroup autoformat_settings
+"  autocmd FileType bzl AutoFormatBuffer buildifier
+"  autocmd FileType c,cpp,proto, AutoFormatBuffer clang-format
+"  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+ " autocmd FileType gn AutoFormatBuffer gn
+ " autocmd FileType html,css,json AutoFormatBuffer js-beautify
+ " autocmd FileType java AutoFormatBuffer google-java-format
+ " autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+augroup END
 "
 "
 set background=light
@@ -46,6 +74,12 @@ colorscheme solarized
 syntax on
 
 filetype plugin indent on
+
+" removes scrollbar from macvim
+set guioptions=
+
+" no bells 
+set visualbell t_vb=
 
 " --- General settings ---
 set backspace=indent,eol,start
@@ -55,24 +89,28 @@ set showcmd
 set incsearch
 set hlsearch
 
+" --- clears highlighted search --- "
+nmap <silent> :/ :nohlsearch<CR>
+
 " --------- CURSOR -----------"
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 :autocmd InsertEnter,InsertLeave * set cul!
+
+" ----- Tsuquyomi -----
+nmap <silent> <leader>i :TsuImport<CR>
+let g:tsuquyomi_singlequte_import = 1
 
 " ----- jistr/vim-nerdtree-tabs -----
 " Open/close NERDTree Tabs with \t
-nmap <silent> <leader>t :NERDTreeTabsToggle<CR>
+nmap <silent> <leader>t :NERDTreeToggle<CR>
 let NERDTreeDirArrows=0
+let NERDTreeShowHidden=1
 
 " ----- airblade/vim-gitgutter settings -----
 " Required after having changed the colorscheme
 hi clear SignColumn
+set signcolumn=yes
 
 " Enable folding (za)
 set foldmethod=indent
@@ -84,7 +122,7 @@ set shiftwidth=2
 " expand tabs with spaces
 set et
 " ignore case in search
-set ic
+" set ic
 
 " ----- lightline.vim  settings -----
 set laststatus=2
@@ -119,17 +157,26 @@ function! LightlineFilename()
 endfunction
 
 " ------- Linters -------- "
-let g:ale_linters = {
-\   'typescript': ['tslint', 'tsserver'],
-\}
+let g:ale_linters = {}
+let g:ale_linters['typescript'] = ['tslint', 'tsserver']
+
+let g:ale_fixers = {}
+let g:ale_fixers['typescript'] = ['prettier']
+let g:ale_fix_on_save = 1
+let g:ale_typescript_prettier_use_local_config = 1 
+
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
+
+" ------- Markdown Preview -------- "
+let vim_markdown_preview_github=1
+let vim_markdown_preview_hotkey='<C-m>'
 
 " search ctrlp with regex by default
 let g:ctrlp_regexp_search = 1
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
-" let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_clear_cache_on_exit = 1
 
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
@@ -141,24 +188,36 @@ if has('persistent_undo')
     set undofile
 endif
 
+" ---------- Swap Lines ---------------
+function! s:swap_lines(n1, n2)
+    let line1 = getline(a:n1)
+    let line2 = getline(a:n2)
+    call setline(a:n1, line2)
+    call setline(a:n2, line1)
+endfunction
 
-"
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-"
-" ---------- Strip Whitespace --------------
-fun! <SID>StripTrailingWhitespaces()
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    call cursor(l, c)
-endfun
-autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+function! s:swap_up()
+    let n = line('.')
+    if n == 1
+        return
+    endif
 
+    call s:swap_lines(n, n - 1)
+    exec n - 1
+endfunction
+
+function! s:swap_down()
+    let n = line('.')
+    if n == line('$')
+        return
+    endif
+
+    call s:swap_lines(n, n + 1)
+    exec n + 1
+endfunction
+
+noremap <silent> <c-s-up> :call <SID>swap_up()<CR>
+noremap <silent> <c-s-down> :call <SID>swap_down()<CR>
+"
+"-------- Copy/Paste from visual mode --------" 
+set clipboard=unnamed

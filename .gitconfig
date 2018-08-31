@@ -1,15 +1,11 @@
 # This is Git's per-user configuration file.
-[user]
-# Please adapt and uncomment the following lines:
-#	name = Chris Meyer
-#	email = chris@christopher-meyer.me
 [push]
 	default = simple
 [core]
 	excludesfile = ~/.gitignore_global
 [user]
 	name = sojournerc
-  email = cmeyer@zvelo.com
+  email = chris@copperlabs.com
 [diff]
     tool = vimdiff
 [difftool]

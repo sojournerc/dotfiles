@@ -3,7 +3,7 @@
 export NODE_PATH="/usr/local/lib/node_modules:/usr/local/lib/node"
 export NODE_ENV="development"
 
-export PATH=$PATH:~/bin
+export PATH=$PATH:~/bin:/usr/local/sbin
 export GOPATH=~/
 
 #git aliases
@@ -35,6 +35,10 @@ alias gll='git log --graph --pretty=oneline --abbrev-commit'
 
 alias git_branch_clean='git branch --merged >/tmp/merged-branches && vim /tmp/merged-branches && xargs git branch -d </tmp/merged-branches'
 
+rggo() { find . -name \*.go -type f | xargs grep -nHr "$1"; }
+rg() { grep -r "$1" ./; }
 
 export NVM_DIR="/Users/chris/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+eval "$(rbenv init -)"
