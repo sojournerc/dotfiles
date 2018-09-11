@@ -25,6 +25,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JamshedVesuna/vim-markdown-preview'
 Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'wting/gitsessions.vim'
 
 "
 "  " ----- Working with Git ----------------------------------------------
@@ -71,6 +72,7 @@ augroup END
 "
 set background=light
 colorscheme solarized
+call togglebg#map("<F5>")
 syntax on
 
 filetype plugin indent on
@@ -218,6 +220,11 @@ endfunction
 
 noremap <silent> <c-s-up> :call <SID>swap_up()<CR>
 noremap <silent> <c-s-down> :call <SID>swap_down()<CR>
+
+" fullscreen fix 
+map <silent> <F11>
+\    :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+
 "
 "-------- Copy/Paste from visual mode --------" 
 set clipboard=unnamed
