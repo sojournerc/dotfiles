@@ -22,10 +22,10 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-scripts/a.vim'
 Plugin 'w0rp/ale'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'terryma/vim-multiple-cursors'
 Plugin 'JamshedVesuna/vim-markdown-preview'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'wting/gitsessions.vim'
+Plugin 'digitaltoad/vim-pug'
 
 "
 "  " ----- Working with Git ----------------------------------------------
@@ -35,43 +35,20 @@ Plugin 'tpope/vim-fugitive'
 "  " ------ Go ------"
 Plugin 'fatih/vim-go', { 'do': 'GoUpdateBinaries' } 
 
-"  " ------ google/vim-codefmt ---- "
-" Add maktaba and codefmt to the runtimepath.
-" (The latter must be installed before it can be used.)
-Plugin 'google/vim-maktaba'
-Plugin 'google/vim-codefmt'
-" Also add Glaive, which is used to configure codefmt's maktaba flags. See
-" `:help :Glaive` for usage.
-Plugin 'google/vim-glaive'
-" ...
-
-"
 " " ------- Typescript _______ "
 Plugin 'leafgarland/typescript-vim'
 Plugin 'Quramy/vim-js-pretty-template'
 Plugin 'jason0x43/vim-js-indent'
 Plugin 'Quramy/tsuquyomi'
 
+" " ------- Rust ------- "
+Plugin 'rust-lang/rust.vim'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-
-" the glaive#Install() should go after the "call vundle#end()"
-call glaive#Install()
-augroup autoformat_settings
-"  autocmd FileType bzl AutoFormatBuffer buildifier
-"  autocmd FileType c,cpp,proto, AutoFormatBuffer clang-format
-"  autocmd FileType dart AutoFormatBuffer dartfmt
-  autocmd FileType go AutoFormatBuffer gofmt
- " autocmd FileType gn AutoFormatBuffer gn
- " autocmd FileType html,css,json AutoFormatBuffer js-beautify
- " autocmd FileType java AutoFormatBuffer google-java-format
- " autocmd FileType python AutoFormatBuffer yapf
-  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
-augroup END
 "
-"
-set background=light
-colorscheme solarized
+set background=dark
+colorscheme desert
 call togglebg#map("<F5>")
 syntax on
 
@@ -79,9 +56,12 @@ filetype plugin indent on
 
 " removes scrollbar from macvim
 set guioptions=
+set wildignore=*/node_modules/*,*/build/*
+set guifont=Hermit\ Light\ 10
 
 " no bells 
-set visualbell t_vb=
+set visualbell
+set t_vb=
 
 " --- General settings ---
 set backspace=indent,eol,start
@@ -102,12 +82,17 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " ----- Tsuquyomi -----
 nmap <silent> <leader>i :TsuImport<CR>
 let g:tsuquyomi_singlequte_import = 1
+let g:tsuquyomi_completion_case_sensitive = 1
+let g:tsuquyomi_completion_preview = 1
+let g:tsuquyomi_disable_quickfix = 0
+let g:tsuquyomi_save_onrename = 1
 
 " ----- jistr/vim-nerdtree-tabs -----
 " Open/close NERDTree Tabs with \t
 nmap <silent> <leader>t :NERDTreeToggle<CR>
 let NERDTreeDirArrows=0
 let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.swp$', '\.swo$']
 
 " ----- airblade/vim-gitgutter settings -----
 " Required after having changed the colorscheme
@@ -160,12 +145,23 @@ endfunction
 
 " ------- Linters -------- "
 let g:ale_linters = {}
-let g:ale_linters['typescript'] = ['tslint', 'tsserver']
+let g:ale_linters['typescript'] = ['tsserver']
+let g:ale_linters['javascript'] = []
+let g:ale_linters['rust'] = ['cargo']
+let g:ale_lint_on_save = 0
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:ale_linters_explicit = 1
 
 let g:ale_fixers = {}
 let g:ale_fixers['typescript'] = ['prettier']
+let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_fix_on_save = 1
+let g:ale_fix_on_save_ignore = ['tslint', 'tsserver']
 let g:ale_typescript_prettier_use_local_config = 1 
+
+" auto-format/complete rust "  
+let g:rustfmt_autosave = 1
 
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
@@ -221,9 +217,23 @@ endfunction
 noremap <silent> <c-s-up> :call <SID>swap_up()<CR>
 noremap <silent> <c-s-down> :call <SID>swap_down()<CR>
 
+" strip trailing whitespace
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+
 " fullscreen fix 
 map <silent> <F11>
 \    :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+
+" list TODO's
+command! Todo noautocmd vimgrep /TODO/j src/** | cw
+command! W noautocmd w
+command! Q noautocmd q
 
 "
 "-------- Copy/Paste from visual mode --------" 

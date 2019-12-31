@@ -30,3 +30,4 @@ alias git_branch_clean='git branch --merged >/tmp/merged-branches && vim /tmp/me
 rggo() { find . -name \*.go -type f | xargs grep -nHr "$1"; }
 rg() { grep -r "$1" ./; }
 
+

@@ -1,5 +1,4 @@
-*.sublime*
-*.swp*
+*.swp
 .DS_STORE
 .DS_Store
 .envrc
