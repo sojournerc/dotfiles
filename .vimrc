@@ -60,7 +60,7 @@ set guioptions=
 set wildignore=*/node_modules/*,*/build/*
 set guifont=Hermit\ Light\ 10
 
-" no bells
+" no bells 
 set visualbell
 set t_vb=
 
@@ -164,6 +164,9 @@ let g:ale_typescript_prettier_use_local_config = 1
 " auto-format/complete rust "
 let g:rustfmt_autosave = 1
 
+" auto-format/complete rust "  
+let g:rustfmt_autosave = 1
+
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
@@ -227,7 +230,7 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
-" fullscreen fix
+" fullscreen fix 
 map <silent> <F11>
 \    :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
 
