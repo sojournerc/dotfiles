@@ -17,6 +17,8 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'maximbaz/lightline-ale'
 "
 "  " ----- Vim as a programmer's text editor -----------------------------
+Plugin 'vim-scripts/dbext.vim'
+Plugin 'dyng/ctrlsf.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'vim-scripts/a.vim'
@@ -40,6 +42,7 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'Quramy/vim-js-pretty-template'
 Plugin 'jason0x43/vim-js-indent'
 Plugin 'Quramy/tsuquyomi'
+Plugin 'Shougo/vimproc.vim'
 
 " " ------- Rust ------- "
 Plugin 'rust-lang/rust.vim'
@@ -49,7 +52,7 @@ call vundle#end()            " required
 "
 set termguicolors
 set background=dark
-colorscheme nuvola
+colorscheme desert
 call togglebg#map("<F5>")
 syntax on
 
@@ -58,9 +61,9 @@ filetype plugin indent on
 " removes scrollbar from macvim
 set guioptions=
 set wildignore=*/node_modules/*,*/build/*
-set guifont=Hermit\ Light\ 10
+set guifont=Hermit\ Light\ 8
 
-" no bells 
+" no bells
 set visualbell
 set t_vb=
 
@@ -71,6 +74,7 @@ set number
 set showcmd
 set incsearch
 set hlsearch
+set nowrap
 
 " --- clears highlighted search --- "
 nmap <silent> :/ :nohlsearch<CR>
@@ -85,7 +89,7 @@ nmap <silent> <leader>i :TsuImport<CR>
 let g:tsuquyomi_singlequte_import = 1
 let g:tsuquyomi_completion_case_sensitive = 1
 let g:tsuquyomi_completion_preview = 1
-let g:tsuquyomi_disable_quickfix = 0
+let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_save_onrename = 1
 
 " ----- jistr/vim-nerdtree-tabs -----
@@ -94,6 +98,11 @@ nmap <silent> <leader>t :NERDTreeToggle<CR>
 let NERDTreeDirArrows=0
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.swp$', '\.swo$']
+
+" CtrlSF
+nmap <C-f>f <Plug>CtrlSFPrompt
+nmap <C-f>n <Plug>CtrlSFCwordPath
+nmap <C-f>p <Plug>CtrlSFPwordPath
 
 " ----- airblade/vim-gitgutter settings -----
 " Required after having changed the colorscheme
@@ -164,7 +173,7 @@ let g:ale_typescript_prettier_use_local_config = 1
 " auto-format/complete rust "
 let g:rustfmt_autosave = 1
 
-" auto-format/complete rust "  
+" auto-format/complete rust "
 let g:rustfmt_autosave = 1
 
 autocmd QuickFixCmdPost [^l]* nested cwindow
@@ -177,7 +186,6 @@ let vim_markdown_preview_hotkey='<C-m>'
 " search ctrlp with regex by default
 let g:ctrlp_regexp_search = 1
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-
 let g:ctrlp_clear_cache_on_exit = 1
 
 " Keep undo history across sessions by storing it in a file
@@ -197,7 +205,6 @@ function! s:swap_lines(n1, n2)
     call setline(a:n1, line2)
     call setline(a:n2, line1)
 endfunction
-
 function! s:swap_up()
     let n = line('.')
     if n == 1
@@ -207,7 +214,6 @@ function! s:swap_up()
     call s:swap_lines(n, n - 1)
     exec n - 1
 endfunction
-
 function! s:swap_down()
     let n = line('.')
     if n == line('$')
@@ -217,7 +223,6 @@ function! s:swap_down()
     call s:swap_lines(n, n + 1)
     exec n + 1
 endfunction
-
 noremap <silent> <c-s-up> :call <SID>swap_up()<CR>
 noremap <silent> <c-s-down> :call <SID>swap_down()<CR>
 
@@ -230,15 +235,19 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
-" fullscreen fix 
-map <silent> <F11>
-\    :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
-
 " list TODO's
 command! Todo noautocmd vimgrep /TODO/j src/** | cw
+
+" common fat-fingers
 command! W noautocmd w
 command! Q noautocmd q
 
+" easier arrows to move between buffers
+nnoremap <silent> <C-Right> <c-w>l
+nnoremap <silent> <C-Left> <c-w>h
+nnoremap <silent> <C-Up> <c-w>k
+nnoremap <silent> <C-Down> <c-w>j
+
 "
 "-------- Copy/Paste from visual mode --------"
-set clipboard=unnamed
+set clipboard+=unnamedplus

@@ -4,12 +4,11 @@ sudo apt install gnome-tweaks;
 sudo apt install neovim;
 sudo apt install zsh curl git;
 sudo apt install golang;
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list;
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list;
 sudo apt update && sudo apt install yarn;
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)";
 sudo apt install direnv;
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash;
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash;
 ssh-keygen -t rsa -b 4096 -C "chris@copperlabs.com"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 sudo apt install build-essential cmake python3-dev;
@@ -40,4 +39,10 @@ python3 install.py --rust-completer --ts-completer --go-completer
 git config --global user.email "chris@copperlabs.com"
 git config --global user.name "Chris Meyer"
 
+# no dock
+gsettings set org.gnome.shell.extensions.dash-to-dock autohide false
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+gsettings set org.gnome.shell.extensions.dash-to-dock intellihide false
+
 firefox https://pcaro.es/p/hermit/#downloads
+firefox https://dystroy.org/broot/documentation/installation://dystroy.org/broot/documentation/installation/
