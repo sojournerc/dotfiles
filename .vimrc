@@ -53,7 +53,7 @@ call vundle#end()            " required
 set termguicolors
 set background=dark
 colorscheme desert
-call togglebg#map("<F5>")
+" call togglebg#map("<F5>")
 syntax on
 
 filetype plugin indent on
@@ -247,6 +247,12 @@ nnoremap <silent> <C-Right> <c-w>l
 nnoremap <silent> <C-Left> <c-w>h
 nnoremap <silent> <C-Up> <c-w>k
 nnoremap <silent> <C-Down> <c-w>j
+
+" Prefer Neovim terminal insert mode to normal mode.
+autocmd BufEnter term://* startinsert
+" exit :term with double escape
+tnoremap <ESC><ESC> <C-\><C-N>
+au TermOpen * setlocal nonumber
 
 "
 "-------- Copy/Paste from visual mode --------"
