@@ -15,6 +15,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
 Plugin 'itchyny/lightline.vim'
 Plugin 'maximbaz/lightline-ale'
+Plugin 'junegunn/goyo.vim'
 "
 "  " ----- Vim as a programmer's text editor -----------------------------
 Plugin 'vim-scripts/dbext.vim'
@@ -51,11 +52,11 @@ Plugin 'rust-lang/rust.vim'
 call vundle#end()            " required
 "
 set termguicolors
-set background=dark
-colorscheme desert
-" call togglebg#map("<F5>")
+set background=light
+autocmd ColorScheme * highlight Pmenu guibg=black
+colorscheme solarized
+call togglebg#map("<F5>")
 syntax on
-
 filetype plugin indent on
 
 " removes scrollbar from macvim
@@ -91,6 +92,8 @@ let g:tsuquyomi_completion_case_sensitive = 1
 let g:tsuquyomi_completion_preview = 1
 let g:tsuquyomi_disable_quickfix = 1
 let g:tsuquyomi_save_onrename = 1
+autocmd FileType typescript nmap <buffer> <Leader>h :
+      \ <C-u>echo tsuquyomi#hint()<CR>
 
 " ----- jistr/vim-nerdtree-tabs -----
 " Open/close NERDTree Tabs with \t
@@ -153,6 +156,8 @@ function! LightlineFilename()
   return expand('%:f/%:t') !=# '' ? expand('%f/%:t') : '[No Name]'
 endfunction
 
+au BufReadPost *.tsx set syntax=typescript
+
 " ------- Linters -------- "
 let g:ale_linters = {}
 let g:ale_linters['typescript'] = ['tsserver']
@@ -165,6 +170,7 @@ let g:ale_linters_explicit = 1
 
 let g:ale_fixers = {}
 let g:ale_fixers['typescript'] = ['prettier']
+let g:ale_fixers['typescriptreact'] = ['prettier']
 let g:ale_fixers['javascript'] = ['prettier']
 let g:ale_fix_on_save = 1
 let g:ale_fix_on_save_ignore = ['tslint', 'tsserver']
@@ -249,10 +255,10 @@ nnoremap <silent> <C-Up> <c-w>k
 nnoremap <silent> <C-Down> <c-w>j
 
 " Prefer Neovim terminal insert mode to normal mode.
-autocmd BufEnter term://* startinsert
+autocmd TermOpen term://* startinsert
+autocmd TermOpen * setlocal nonumber
 " exit :term with double escape
 tnoremap <ESC><ESC> <C-\><C-N>
-au TermOpen * setlocal nonumber
 
 "
 "-------- Copy/Paste from visual mode --------"
